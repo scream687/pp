@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Activity Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #1e293b;
+            color: #fff;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            padding: 10px 20px 30px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .sidebar nav {
+            margin-top: 20px;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background: #334155;
+            color: #fff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .sidebar nav a .icon {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 240px;
+            padding: 24px 32px;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .top-bar h1 {
+            font-size: 1.6rem;
+            color: #1e293b;
+        }
+
+        .top-bar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .top-bar .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* Stat Cards */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .stat-card .change {
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+
+        .stat-card .change.up { color: #22c55e; }
+        .stat-card .change.down { color: #ef4444; }
+
+        /* Sections */
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            color: #1e293b;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Activity Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        table tr:hover {
+            background: #f8fafc;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status.active { background: #dcfce7; color: #166534; }
+        .status.away { background: #fef9c3; color: #854d0e; }
+        .status.offline { background: #fee2e2; color: #991b1b; }
+        .status.on-leave { background: #e0e7ff; color: #3730a3; }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .tab:hover { color: #1e293b; }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e293b;
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        /* Search */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 8px 14px;
+            width: 280px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .main {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">HR Dashboard</div>
+        <nav>
+            <a href="#" class="active" onclick="showSection('overview')">
+                <span class="icon">&#9776;</span> Overview
+            </a>
+            <a href="#" onclick="showSection('activity')">
+                <span class="icon">&#9201;</span> Activity Log
+            </a>
+            <a href="#" onclick="showSection('forms')">
+                <span class="icon">&#9998;</span> Forms
+            </a>
+            <a href="#" onclick="showSection('employees')">
+                <span class="icon">&#9823;</span> Employees
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <h1 id="page-title">Overview</h1>
+            <div class="user-info">
+                <div class="search-bar">
+                    <span>&#128269;</span>
+                    <input type="text" placeholder="Search employees..." id="searchInput" onkeyup="filterTable()">
+                </div>
+                <div class="avatar">A</div>
+                <span>Admin</span>
+            </div>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="section-overview" class="page-section">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="label">Total Employees</div>
+                    <div class="value" id="totalEmployees">48</div>
+                    <div class="change up">+3 this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Active Now</div>
+                    <div class="value" id="activeNow">32</div>
+                    <div class="change up">67% online</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">On Leave</div>
+                    <div class="value">5</div>
+                    <div class="change">2 returning tomorrow</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Pending Forms</div>
+                    <div class="value" id="pendingForms">12</div>
+                    <div class="change down">4 overdue</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section">
+                <h2>Recent Activity</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Action</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentActivityBody">
+                        <tr>
+                            <td>Sarah Johnson</td>
+                            <td>Submitted leave request</td>
+                            <td>2026-03-12</td>
+                            <td><span class="status active">Approved</span></td>
+                        </tr>
+                        <tr>
+                            <td>Mike Chen</td>
+                            <td>Completed onboarding form</td>
+                            <td>2026-03-11</td>
+                            <td><span class="status active">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>Emma Davis</td>
+                            <td>Clocked in late</td>
+                            <td>2026-03-11</td>
+                            <td><span class="status away">Flagged</span></td>
+                        </tr>
+                        <tr>
+                            <td>James Wilson</td>
+                            <td>Requested equipment</td>
+                            <td>2026-03-10</td>
+                            <td><span class="status away">Pending</span></td>
+                        </tr>
+                        <tr>
+                            <td>Lisa Brown</td>
+                            <td>Submitted expense report</td>
+                            <td>2026-03-10</td>
+                            <td><span class="status active">Approved</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Activity Log Section -->
+        <div id="section-activity" class="page-section" style="display:none;">
+            <div class="section">
+                <h2>Employee Activity Log</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Clock In</th>
+                            <th>Clock Out</th>
+                            <th>Hours</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activityBody">
+                        <tr>
+                            <td>Sarah Johnson</td>
+                            <td>Engineering</td>
+                            <td>08:55</td>
+                            <td>17:30</td>
+                            <td>8.5</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Mike Chen</td>
+                            <td>Design</td>
+                            <td>09:10</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Emma Davis</td>
+                            <td>Marketing</td>
+                            <td>09:45</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td><span class="status away">Away</span></td>
+                        </tr>
+                        <tr>
+                            <td>James Wilson</td>
+                            <td>Sales</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td><span class="status offline">Offline</span></td>
+                        </tr>
+                        <tr>
+                            <td>Lisa Brown</td>
+                            <td>HR</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td><span class="status on-leave">On Leave</span></td>
+                        </tr>
+                        <tr>
+                            <td>David Kim</td>
+                            <td>Engineering</td>
+                            <td>08:30</td>
+                            <td>--</td>
+                            <td>--</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Rachel Adams</td>
+                            <td>Finance</td>
+                            <td>09:00</td>
+                            <td>17:00</td>
+                            <td>8.0</td>
+                            <td><span class="status active">Active</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Forms Section -->
+        <div id="section-forms" class="page-section" style="display:none;">
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('leave')">Leave Request</button>
+                <button class="tab" onclick="switchTab('expense')">Expense Report</button>
+                <button class="tab" onclick="switchTab('feedback')">Feedback</button>
+            </div>
+
+            <!-- Leave Request Form -->
+            <div id="tab-leave" class="tab-content active">
+                <div class="section">
+                    <h2>Leave Request Form</h2>
+                    <form onsubmit="submitForm(event, 'Leave request')" class="form-grid">
+                        <div class="form-group">
+                            <label for="leave-name">Employee Name</label>
+                            <input type="text" id="leave-name" required placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="leave-dept">Department</label>
+                            <select id="leave-dept" required>
+                                <option value="">Select department</option>
+                                <option>Engineering</option>
+                                <option>Design</option>
+                                <option>Marketing</option>
+                                <option>Sales</option>
+                                <option>HR</option>
+                                <option>Finance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="leave-type">Leave Type</label>
+                            <select id="leave-type" required>
+                                <option value="">Select type</option>
+                                <option>Annual Leave</option>
+                                <option>Sick Leave</option>
+                                <option>Personal Leave</option>
+                                <option>Maternity/Paternity</option>
+                                <option>Unpaid Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="leave-duration">Duration (days)</label>
+                            <input type="number" id="leave-duration" min="1" max="30" required placeholder="Number of days">
+                        </div>
+                        <div class="form-group">
+                            <label for="leave-start">Start Date</label>
+                            <input type="date" id="leave-start" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leave-end">End Date</label>
+                            <input type="date" id="leave-end" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="leave-reason">Reason</label>
+                            <textarea id="leave-reason" placeholder="Briefly describe the reason for leave..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Submit Request</button>
+                                <button type="reset" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Expense Report Form -->
+            <div id="tab-expense" class="tab-content">
+                <div class="section">
+                    <h2>Expense Report Form</h2>
+                    <form onsubmit="submitForm(event, 'Expense report')" class="form-grid">
+                        <div class="form-group">
+                            <label for="exp-name">Employee Name</label>
+                            <input type="text" id="exp-name" required placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-dept">Department</label>
+                            <select id="exp-dept" required>
+                                <option value="">Select department</option>
+                                <option>Engineering</option>
+                                <option>Design</option>
+                                <option>Marketing</option>
+                                <option>Sales</option>
+                                <option>HR</option>
+                                <option>Finance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-category">Category</label>
+                            <select id="exp-category" required>
+                                <option value="">Select category</option>
+                                <option>Travel</option>
+                                <option>Meals</option>
+                                <option>Equipment</option>
+                                <option>Software</option>
+                                <option>Training</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-amount">Amount ($)</label>
+                            <input type="number" id="exp-amount" min="0" step="0.01" required placeholder="0.00">
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-date">Expense Date</label>
+                            <input type="date" id="exp-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exp-receipt">Receipt Number</label>
+                            <input type="text" id="exp-receipt" placeholder="e.g., REC-2026-001">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="exp-desc">Description</label>
+                            <textarea id="exp-desc" placeholder="Describe the expense..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Submit Expense</button>
+                                <button type="reset" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Feedback Form -->
+            <div id="tab-feedback" class="tab-content">
+                <div class="section">
+                    <h2>Employee Feedback Form</h2>
+                    <form onsubmit="submitForm(event, 'Feedback')" class="form-grid">
+                        <div class="form-group">
+                            <label for="fb-name">Your Name</label>
+                            <input type="text" id="fb-name" required placeholder="Full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="fb-dept">Department</label>
+                            <select id="fb-dept" required>
+                                <option value="">Select department</option>
+                                <option>Engineering</option>
+                                <option>Design</option>
+                                <option>Marketing</option>
+                                <option>Sales</option>
+                                <option>HR</option>
+                                <option>Finance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fb-type">Feedback Type</label>
+                            <select id="fb-type" required>
+                                <option value="">Select type</option>
+                                <option>Suggestion</option>
+                                <option>Complaint</option>
+                                <option>Appreciation</option>
+                                <option>General</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fb-priority">Priority</label>
+                            <select id="fb-priority">
+                                <option>Low</option>
+                                <option selected>Medium</option>
+                                <option>High</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="fb-subject">Subject</label>
+                            <input type="text" id="fb-subject" required placeholder="Brief subject line">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="fb-message">Message</label>
+                            <textarea id="fb-message" required placeholder="Share your feedback in detail..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>
+                                <input type="checkbox" id="fb-anonymous"> Submit anonymously
+                            </label>
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                <button type="reset" class="btn btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Section -->
+        <div id="section-employees" class="page-section" style="display:none;">
+            <div class="section">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h2 style="border:none; margin:0; padding:0;">Employee Directory</h2>
+                    <button class="btn btn-primary" onclick="openModal()">+ Add Employee</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeBody">
+                        <tr>
+                            <td>Sarah Johnson</td>
+                            <td>s.johnson@company.com</td>
+                            <td>Engineering</td>
+                            <td>Senior Developer</td>
+                            <td><span class="status active">Active</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>Mike Chen</td>
+                            <td>m.chen@company.com</td>
+                            <td>Design</td>
+                            <td>UI/UX Designer</td>
+                            <td><span class="status active">Active</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>Emma Davis</td>
+                            <td>e.davis@company.com</td>
+                            <td>Marketing</td>
+                            <td>Marketing Manager</td>
+                            <td><span class="status away">Away</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>James Wilson</td>
+                            <td>j.wilson@company.com</td>
+                            <td>Sales</td>
+                            <td>Sales Lead</td>
+                            <td><span class="status offline">Offline</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>Lisa Brown</td>
+                            <td>l.brown@company.com</td>
+                            <td>HR</td>
+                            <td>HR Specialist</td>
+                            <td><span class="status on-leave">On Leave</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>David Kim</td>
+                            <td>d.kim@company.com</td>
+                            <td>Engineering</td>
+                            <td>Backend Developer</td>
+                            <td><span class="status active">Active</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                        <tr>
+                            <td>Rachel Adams</td>
+                            <td>r.adams@company.com</td>
+                            <td>Finance</td>
+                            <td>Financial Analyst</td>
+                            <td><span class="status active">Active</span></td>
+                            <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Employee Modal -->
+    <div class="modal-overlay" id="addEmployeeModal">
+        <div class="modal">
+            <h2>Add New Employee</h2>
+            <form onsubmit="addEmployee(event)" class="form-grid">
+                <div class="form-group">
+                    <label for="new-name">Full Name</label>
+                    <input type="text" id="new-name" required placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label for="new-email">Email</label>
+                    <input type="email" id="new-email" required placeholder="email@company.com">
+                </div>
+                <div class="form-group">
+                    <label for="new-dept">Department</label>
+                    <select id="new-dept" required>
+                        <option value="">Select department</option>
+                        <option>Engineering</option>
+                        <option>Design</option>
+                        <option>Marketing</option>
+                        <option>Sales</option>
+                        <option>HR</option>
+                        <option>Finance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="new-role">Role</label>
+                    <input type="text" id="new-role" required placeholder="Job title">
+                </div>
+                <div class="form-group full-width">
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Employee</button>
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Section Navigation
+        function showSection(name) {
+            document.querySelectorAll('.page-section').forEach(s => s.style.display = 'none');
+            document.getElementById('section-' + name).style.display = 'block';
+
+            const titles = { overview: 'Overview', activity: 'Activity Log', forms: 'Forms', employees: 'Employees' };
+            document.getElementById('page-title').textContent = titles[name];
+
+            document.querySelectorAll('.sidebar nav a').forEach(a => a.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Form Submission
+        function submitForm(e, formName) {
+            e.preventDefault();
+            showToast(formName + ' submitted successfully!');
+            e.target.reset();
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Modal
+        function openModal() {
+            document.getElementById('addEmployeeModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('addEmployeeModal').classList.remove('show');
+        }
+
+        document.getElementById('addEmployeeModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Add Employee
+        function addEmployee(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-name').value;
+            const email = document.getElementById('new-email').value;
+            const dept = document.getElementById('new-dept').value;
+            const role = document.getElementById('new-role').value;
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${escapeHtml(name)}</td>
+                <td>${escapeHtml(email)}</td>
+                <td>${escapeHtml(dept)}</td>
+                <td>${escapeHtml(role)}</td>
+                <td><span class="status active">Active</span></td>
+                <td><button class="btn btn-secondary" onclick="showToast('Edit feature coming soon')">Edit</button></td>
+            `;
+            document.getElementById('employeeBody').appendChild(row);
+
+            const total = document.getElementById('totalEmployees');
+            total.textContent = parseInt(total.textContent) + 1;
+
+            closeModal();
+            e.target.reset();
+            showToast('Employee added successfully!');
+        }
+
+        // Search / Filter
+        function filterTable() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const tables = document.querySelectorAll('tbody');
+            tables.forEach(tbody => {
+                tbody.querySelectorAll('tr').forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(query) ? '' : 'none';
+                });
+            });
+        }
+
+        // HTML escaping to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
