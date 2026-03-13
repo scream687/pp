@@ -1,0 +1,24 @@
+{
+  "marketplaces": {
+    "coreyhaines31/marketingskills": {
+      "source": "coreyhaines31/marketingskills",
+      "added_at": "2026-03-13T00:00:00"
+    }
+  },
+  "installed": {
+    "coreyhaines31/marketingskills/marketing-skills": {
+      "marketplace": "coreyhaines31/marketingskills",
+      "plugin": "marketing-skills",
+      "version": "1.0.0",
+      "skills": [
+        "seo_optimizer",
+        "title_generator",
+        "tag_strategy",
+        "audience_analyzer",
+        "content_calendar",
+        "thumbnail_advisor"
+      ],
+      "installed_at": "2026-03-13T00:00:00"
+    }
+  }
+}

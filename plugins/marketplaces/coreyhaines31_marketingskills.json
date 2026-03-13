@@ -1,0 +1,19 @@
+{
+  "name": "coreyhaines31/marketingskills",
+  "description": "Marketing skills plugin suite for YouTube content creators",
+  "author": "coreyhaines31",
+  "version": "1.0.0",
+  "plugins": {
+    "marketing-skills": {
+      "description": "Complete set of marketing skills for YouTube optimization",
+      "skills": [
+        "seo_optimizer",
+        "title_generator",
+        "tag_strategy",
+        "audience_analyzer",
+        "content_calendar",
+        "thumbnail_advisor"
+      ]
+    }
+  }
+}
