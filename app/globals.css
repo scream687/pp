@@ -10,7 +10,7 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════
-   BASE RESETS + GLOBAL STYLES
+   BASE
    ═══════════════════════════════════════════════ */
 
 *, *::before, *::after {
@@ -20,7 +20,7 @@
 }
 
 html {
-  scroll-behavior: auto; /* We handle scroll manually */
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -37,204 +37,257 @@ body {
    TYPOGRAPHY UTILITIES
    ═══════════════════════════════════════════════ */
 
-.font-display {
-  font-family: var(--font-display);
-}
+.font-display { font-family: var(--font-display); }
 
+/* Gold gradient text — used sparingly as brand accent */
 .text-gradient-gold {
-  background: linear-gradient(
-    135deg,
-    var(--color-saffron-bright) 0%,
-    var(--color-gold-light) 40%,
-    var(--color-saffron) 100%
-  );
+  background: linear-gradient(135deg, #C67C11 0%, #D4A017 50%, #B8860B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.text-gradient-sacred {
-  background: linear-gradient(
-    135deg,
-    #F9C46A 0%,
-    #E2C46B 35%,
-    #C9A84C 65%,
-    #F4A520 100%
-  );
+/* Overlay headline gradient (on dark canvas sections) */
+.text-gradient-canvas {
+  background: linear-gradient(135deg, #F9C46A 0%, #E2C46B 40%, #F4A520 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 /* ═══════════════════════════════════════════════
-   SHIMMER EFFECT
+   SECTION LABEL (Apple "eyebrow" style)
    ═══════════════════════════════════════════════ */
 
-.shimmer-text {
-  background: linear-gradient(
-    90deg,
-    var(--color-gold-pale) 0%,
-    var(--color-saffron-bright) 25%,
-    var(--color-gold-pale) 50%,
-    var(--color-saffron-bright) 75%,
-    var(--color-gold-pale) 100%
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 4s linear infinite;
-}
-
-@keyframes shimmer {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+.section-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
 }
 
 /* ═══════════════════════════════════════════════
-   BORDER + SURFACE UTILITIES
+   BUTTONS — Apple pill style
    ═══════════════════════════════════════════════ */
 
-.border-gold {
-  border-color: var(--color-border);
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 1.75rem;
+  background: var(--color-cta-bg);
+  color: var(--color-cta-text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-apple),
+              transform var(--duration-fast) var(--ease-apple),
+              box-shadow var(--duration-fast) var(--ease-apple);
+  white-space: nowrap;
+  text-decoration: none;
 }
 
-.border-gold-bright {
-  border-color: var(--color-border-bright);
+.btn-primary:hover {
+  background: var(--color-cta-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
 }
 
-.surface-glass {
-  background: rgba(15, 22, 40, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.75rem 1.75rem;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-full);
   border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-apple);
+  white-space: nowrap;
+  text-decoration: none;
 }
 
-.surface-elevated {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+.btn-ghost:hover {
+  background: var(--color-bg-secondary);
+  border-color: #AEAEB2;
+}
+
+/* Link-style CTA (Apple blue) */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--color-link);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-apple);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.btn-link:hover {
+  color: var(--color-link-hover);
+}
+
+.btn-link svg {
+  transition: transform var(--duration-fast) var(--ease-reveal);
+}
+
+.btn-link:hover svg {
+  transform: translateX(3px);
 }
 
 /* ═══════════════════════════════════════════════
-   SCROLL LOCK (used during canvas sequence)
+   CARDS — Apple product card style
    ═══════════════════════════════════════════════ */
 
-.scroll-snap-none {
-  scroll-snap-type: none;
+.card-apple {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border-subtle);
+  transition: box-shadow var(--duration-medium) var(--ease-apple),
+              transform var(--duration-medium) var(--ease-apple);
+  overflow: hidden;
+}
+
+.card-apple:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* On gray background, card is white elevated */
+.card-apple-elevated {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid transparent;
+  transition: box-shadow var(--duration-medium) var(--ease-apple),
+              transform var(--duration-medium) var(--ease-apple);
+  overflow: hidden;
+}
+
+.card-apple-elevated:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-5px);
 }
 
 /* ═══════════════════════════════════════════════
    DIVIDER
    ═══════════════════════════════════════════════ */
 
+.divider {
+  height: 1px;
+  background: var(--color-border-subtle);
+}
+
 .divider-gold {
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--color-border-bright) 30%,
-    var(--color-gold) 50%,
-    var(--color-border-bright) 70%,
+    rgba(184,134,11,0.3) 30%,
+    rgba(184,134,11,0.6) 50%,
+    rgba(184,134,11,0.3) 70%,
     transparent 100%
   );
 }
 
 /* ═══════════════════════════════════════════════
-   ORNAMENT (decorative Sanskrit-inspired line)
+   PILL BADGE
    ═══════════════════════════════════════════════ */
 
-.ornament::before,
-.ornament::after {
-  content: "—";
-  color: var(--color-gold);
-  opacity: 0.5;
-  margin: 0 0.5rem;
-}
-
-/* ═══════════════════════════════════════════════
-   BUTTON BASE
-   ═══════════════════════════════════════════════ */
-
-.btn-primary {
+.badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  background: linear-gradient(135deg, var(--color-saffron) 0%, var(--color-saffron-light) 100%);
-  color: var(--color-bg-primary);
+  gap: 0.375rem;
+  padding: 0.3125rem 0.875rem;
+  border-radius: var(--radius-full);
   font-family: var(--font-body);
+  font-size: 0.75rem;
   font-weight: 500;
-  font-size: 0.9375rem;
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-md);
-  border: none;
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-sacred);
-  position: relative;
-  overflow: hidden;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-subtle);
 }
 
-.btn-primary::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--color-saffron-light) 0%, var(--color-saffron-bright) 100%);
-  opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease-sacred);
-}
-
-.btn-primary:hover::before {
-  opacity: 1;
-}
-
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-gold-lg);
-}
-
-.btn-primary span {
-  position: relative;
-  z-index: 1;
-}
-
-.btn-ghost {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 2rem;
-  background: transparent;
-  color: var(--color-gold-light);
-  font-family: var(--font-body);
-  font-weight: 400;
-  font-size: 0.9375rem;
-  letter-spacing: 0.02em;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-bright);
-  cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-sacred);
-}
-
-.btn-ghost:hover {
-  background: rgba(201, 168, 76, 0.08);
-  border-color: var(--color-gold);
-  color: var(--color-gold-pale);
+.badge-gold {
+  background: rgba(184,134,11,0.07);
+  color: var(--color-gold);
+  border-color: rgba(184,134,11,0.2);
 }
 
 /* ═══════════════════════════════════════════════
-   CARD
+   CANVAS OVERLAY text (on dark cinematic section)
    ═══════════════════════════════════════════════ */
 
-.card-premium {
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  transition: all var(--duration-medium) var(--ease-sacred);
+.overlay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3125rem 0.875rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.07);
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(8px);
 }
 
-.card-premium:hover {
-  border-color: var(--color-border-bright);
-  box-shadow: var(--shadow-gold-md);
-  transform: translateY(-4px);
+/* ═══════════════════════════════════════════════
+   FORM INPUTS
+   ═══════════════════════════════════════════════ */
+
+.input-apple {
+  width: 100%;
+  padding: 0.8125rem 1rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-apple),
+              box-shadow var(--duration-fast) var(--ease-apple);
+}
+
+.input-apple::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input-apple:focus {
+  border-color: var(--color-link);
+  box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+  background: var(--color-bg-primary);
 }
 
 /* ═══════════════════════════════════════════════

@@ -61,39 +61,26 @@ const OverlaySection = memo(function OverlaySection({
       }}
     >
       {/* Badge */}
-      <div
-        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
-        style={{
-          background: "rgba(201,168,76,0.08)",
-          border: "1px solid rgba(201,168,76,0.25)",
-        }}
-      >
-        <span
-          className="w-1 h-1 rounded-full"
-          style={{ background: "var(--color-saffron-light)" }}
-        />
-        <span
-          className="font-body text-caption tracking-[0.14em] uppercase"
-          style={{ color: "var(--color-gold-light)" }}
-        >
-          {badge}
-        </span>
+      <div className="overlay-badge">
+        <span className="w-1 h-1 rounded-full inline-block" style={{ background: "rgba(255,200,80,0.8)" }} />
+        {badge}
       </div>
 
       {/* Headline */}
       <h2
-        className="font-display"
         style={{
+          fontFamily: "var(--font-body)",
+          fontWeight: 700,
           fontSize: "clamp(2.25rem, 5.5vw, 5rem)",
-          lineHeight: 1.07,
-          letterSpacing: "-0.02em",
-          color: "var(--color-lotus)",
+          lineHeight: 1.05,
+          letterSpacing: "-0.03em",
+          color: "#FFFFFF",
         }}
       >
         {lines.map((line, i) => (
           <span key={i} className="block">
             {i === lines.length - 1 ? (
-              <span className="text-gradient-sacred">{line}</span>
+              <span className="text-gradient-canvas">{line}</span>
             ) : (
               line
             )}
@@ -103,12 +90,14 @@ const OverlaySection = memo(function OverlaySection({
 
       {/* Subtext */}
       <p
-        className="font-body"
         style={{
+          fontFamily: "var(--font-body)",
+          fontWeight: 300,
           fontSize: "clamp(1rem, 1.4vw, 1.25rem)",
           lineHeight: 1.65,
-          color: "var(--color-text-secondary)",
+          color: "rgba(255,255,255,0.65)",
           maxWidth: "42ch",
+          letterSpacing: "-0.005em",
         }}
       >
         {subtext}
@@ -116,10 +105,9 @@ const OverlaySection = memo(function OverlaySection({
 
       {/* Decorative line */}
       <div
-        className="h-px w-16"
+        className="h-px w-12"
         style={{
-          background:
-            "linear-gradient(90deg, var(--color-gold), transparent)",
+          background: "linear-gradient(90deg, rgba(255,200,80,0.7), transparent)",
           alignSelf: alignment === "right" ? "flex-end" : alignment === "center" ? "center" : "flex-start",
         }}
       />

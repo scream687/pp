@@ -8,52 +8,38 @@ export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
   const [activeIndex, setActiveIndex] = useState(0);
-
   const active = TESTIMONIALS[activeIndex];
 
   return (
     <section
       id="testimonials"
       ref={ref}
-      className="relative py-20 md:py-28 lg:py-36 overflow-hidden"
-      style={{ background: "var(--color-bg-secondary)" }}
       aria-label="Client testimonials"
+      style={{ background: "var(--color-bg-primary)", padding: "96px 0 112px" }}
     >
-      {/* Background ornament */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        aria-hidden="true"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 70% 30%, rgba(201,168,76,0.04) 0%, transparent 60%)",
-        }}
-      />
+      <div style={{ maxWidth: "var(--max-content)", margin: "0 auto", padding: "0 24px" }}>
 
-      <div
-        className="px-6 md:px-12 lg:px-16 relative"
-        style={{ maxWidth: "var(--max-content)", margin: "0 auto" }}
-      >
-        {/* Section header */}
-        <div className="text-center mb-16 md:mb-20">
+        {/* Header */}
+        <div className="text-center mb-16">
           <motion.span
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.7 }}
-            className="font-body text-caption tracking-[0.14em] uppercase block mb-4"
-            style={{ color: "var(--color-saffron)" }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="section-label"
           >
             Stories of Trust
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display"
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.07, ease: [0.16, 1, 0.3, 1] }}
             style={{
-              fontSize: "clamp(1.875rem, 3.5vw, 3rem)",
+              fontFamily: "var(--font-body)",
+              fontWeight: 700,
+              fontSize: "clamp(1.875rem, 3.5vw, 2.75rem)",
+              letterSpacing: "-0.025em",
               lineHeight: 1.1,
-              letterSpacing: "-0.02em",
-              color: "var(--color-lotus)",
+              color: "var(--color-text-primary)",
             }}
           >
             Families Who Found{" "}
@@ -61,29 +47,33 @@ export default function Testimonials() {
           </motion.h2>
         </div>
 
-        {/* Testimonial display */}
+        {/* Testimonial card */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative"
         >
-          {/* Quote card */}
           <div
-            className="relative rounded-2xl p-8 md:p-12 lg:p-16 mb-10"
             style={{
-              background: "var(--color-bg-surface)",
-              border: "1px solid var(--color-border)",
+              background: "var(--color-bg-secondary)",
+              borderRadius: "var(--radius-2xl)",
+              padding: "48px 40px 40px",
+              position: "relative",
+              marginBottom: "24px",
             }}
           >
-            {/* Large quote mark */}
+            {/* Large quote */}
             <div
-              className="absolute top-6 left-8 font-display leading-none select-none"
               style={{
-                fontSize: "6rem",
-                color: "var(--color-gold)",
-                opacity: 0.08,
+                position: "absolute",
+                top: "20px",
+                left: "32px",
+                fontFamily: "var(--font-display)",
+                fontSize: "5rem",
                 lineHeight: 0.8,
+                color: "var(--color-text-primary)",
+                opacity: 0.07,
+                userSelect: "none",
               }}
               aria-hidden="true"
             >
@@ -93,60 +83,52 @@ export default function Testimonials() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={active.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               >
-                {/* Quote text */}
                 <blockquote
-                  className="font-display italic mb-8 relative z-10"
                   style={{
-                    fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
-                    lineHeight: 1.55,
-                    color: "var(--color-lotus)",
+                    fontFamily: "var(--font-body)",
+                    fontSize: "clamp(1.0625rem, 1.8vw, 1.375rem)",
+                    lineHeight: 1.6,
+                    color: "var(--color-text-primary)",
                     letterSpacing: "-0.01em",
-                    maxWidth: "60ch",
+                    fontWeight: 300,
+                    marginBottom: "28px",
+                    maxWidth: "64ch",
                   }}
                 >
                   &ldquo;{active.quote}&rdquo;
                 </blockquote>
 
-                {/* Attribution */}
-                <div className="flex items-center gap-4">
-                  {/* Avatar placeholder */}
+                <div className="flex items-center gap-3">
                   <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
                     style={{
-                      background: "rgba(201,168,76,0.15)",
-                      border: "1px solid rgba(201,168,76,0.25)",
-                      color: "var(--color-gold)",
-                      fontFamily: "var(--font-display)",
-                      fontSize: "1rem",
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      background: "linear-gradient(135deg, #B8860B, #D4A017)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#fff",
+                      fontFamily: "var(--font-body)",
                       fontWeight: 600,
+                      fontSize: "1rem",
+                      flexShrink: 0,
                     }}
                     aria-hidden="true"
                   >
                     {active.name.charAt(0)}
                   </div>
                   <div>
-                    <div
-                      className="font-body font-medium"
-                      style={{
-                        fontSize: "0.9375rem",
-                        color: "var(--color-lotus)",
-                      }}
-                    >
+                    <div style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: "0.9375rem", color: "var(--color-text-primary)" }}>
                       {active.name}
                     </div>
-                    <div
-                      className="font-body"
-                      style={{
-                        fontSize: "0.8125rem",
-                        color: "var(--color-text-muted)",
-                      }}
-                    >
-                      {active.location} · {active.propertyBought}
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.8125rem", color: "var(--color-text-secondary)" }}>
+                      {active.location} &middot; {active.propertyBought}
                     </div>
                   </div>
                 </div>
@@ -154,83 +136,50 @@ export default function Testimonials() {
             </AnimatePresence>
           </div>
 
-          {/* Navigation dots */}
-          <div
-            className="flex items-center justify-center gap-3"
-            role="tablist"
-            aria-label="Testimonial navigation"
-          >
+          {/* Tab navigation */}
+          <div className="flex items-center justify-center gap-2" role="tablist" aria-label="Testimonials">
             {TESTIMONIALS.map((t, i) => (
               <button
                 key={t.id}
                 role="tab"
                 aria-selected={i === activeIndex}
-                aria-label={`View testimonial from ${t.name}`}
+                aria-label={`Testimonial from ${t.name}`}
                 onClick={() => setActiveIndex(i)}
-                className="transition-all duration-300"
                 style={{
-                  width: i === activeIndex ? "2rem" : "0.5rem",
-                  height: "0.375rem",
+                  height: "4px",
+                  width: i === activeIndex ? "28px" : "4px",
                   borderRadius: "9999px",
-                  background:
-                    i === activeIndex
-                      ? "var(--color-gold)"
-                      : "rgba(201,168,76,0.2)",
+                  background: i === activeIndex ? "var(--color-text-primary)" : "var(--color-border)",
                   border: "none",
                   cursor: "pointer",
                   padding: 0,
+                  transition: "all 0.3s cubic-bezier(0.16,1,0.3,1)",
                 }}
               />
             ))}
           </div>
-
-          {/* Auto-advance for accessibility — users can also click */}
         </motion.div>
 
         {/* Trust badges */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-wrap items-center justify-center gap-6 mt-14"
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-wrap items-center justify-center gap-3 mt-14"
         >
-          {[
-            "RERA Registered",
-            "16+ Years Experience",
-            "Clear Title Guarantee",
-            "NRI Friendly",
-          ].map((badge) => (
+          {["RERA Registered", "16+ Years Experience", "Clear Title Guarantee", "NRI Friendly"].map((badge) => (
             <div
               key={badge}
               className="flex items-center gap-2 px-4 py-2 rounded-full"
               style={{
-                background: "rgba(201,168,76,0.05)",
-                border: "1px solid var(--color-border)",
+                background: "var(--color-bg-secondary)",
+                border: "1px solid var(--color-border-subtle)",
               }}
             >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 16 16"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M13 4L6.5 11 3 7.5"
-                  stroke="var(--color-gold)"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M13 4L6.5 11 3 7.5" stroke="var(--color-gold)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span
-                className="font-body"
-                style={{
-                  fontSize: "0.8125rem",
-                  color: "var(--color-text-secondary)",
-                  letterSpacing: "0.01em",
-                }}
-              >
+              <span style={{ fontFamily: "var(--font-body)", fontSize: "0.8125rem", color: "var(--color-text-secondary)" }}>
                 {badge}
               </span>
             </div>
