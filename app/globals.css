@@ -1,0 +1,250 @@
+@import "../styles/design-tokens.css";
+@import "@fontsource/playfair-display/400.css";
+@import "@fontsource/playfair-display/600.css";
+@import "@fontsource/playfair-display/700.css";
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════
+   BASE RESETS + GLOBAL STYLES
+   ═══════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* We handle scroll manually */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   TYPOGRAPHY UTILITIES
+   ═══════════════════════════════════════════════ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(
+    135deg,
+    var(--color-saffron-bright) 0%,
+    var(--color-gold-light) 40%,
+    var(--color-saffron) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-sacred {
+  background: linear-gradient(
+    135deg,
+    #F9C46A 0%,
+    #E2C46B 35%,
+    #C9A84C 65%,
+    #F4A520 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════
+   SHIMMER EFFECT
+   ═══════════════════════════════════════════════ */
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-gold-pale) 0%,
+    var(--color-saffron-bright) 25%,
+    var(--color-gold-pale) 50%,
+    var(--color-saffron-bright) 75%,
+    var(--color-gold-pale) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ═══════════════════════════════════════════════
+   BORDER + SURFACE UTILITIES
+   ═══════════════════════════════════════════════ */
+
+.border-gold {
+  border-color: var(--color-border);
+}
+
+.border-gold-bright {
+  border-color: var(--color-border-bright);
+}
+
+.surface-glass {
+  background: rgba(15, 22, 40, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+.surface-elevated {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+}
+
+/* ═══════════════════════════════════════════════
+   SCROLL LOCK (used during canvas sequence)
+   ═══════════════════════════════════════════════ */
+
+.scroll-snap-none {
+  scroll-snap-type: none;
+}
+
+/* ═══════════════════════════════════════════════
+   DIVIDER
+   ═══════════════════════════════════════════════ */
+
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-border-bright) 30%,
+    var(--color-gold) 50%,
+    var(--color-border-bright) 70%,
+    transparent 100%
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   ORNAMENT (decorative Sanskrit-inspired line)
+   ═══════════════════════════════════════════════ */
+
+.ornament::before,
+.ornament::after {
+  content: "—";
+  color: var(--color-gold);
+  opacity: 0.5;
+  margin: 0 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════
+   BUTTON BASE
+   ═══════════════════════════════════════════════ */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, var(--color-saffron) 0%, var(--color-saffron-light) 100%);
+  color: var(--color-bg-primary);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-sacred);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-saffron-light) 0%, var(--color-saffron-bright) 100%);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-sacred);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-gold-lg);
+}
+
+.btn-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  color: var(--color-gold-light);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-bright);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-sacred);
+}
+
+.btn-ghost:hover {
+  background: rgba(201, 168, 76, 0.08);
+  border-color: var(--color-gold);
+  color: var(--color-gold-pale);
+}
+
+/* ═══════════════════════════════════════════════
+   CARD
+   ═══════════════════════════════════════════════ */
+
+.card-premium {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: all var(--duration-medium) var(--ease-sacred);
+}
+
+.card-premium:hover {
+  border-color: var(--color-border-bright);
+  box-shadow: var(--shadow-gold-md);
+  transform: translateY(-4px);
+}
+
+/* ═══════════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

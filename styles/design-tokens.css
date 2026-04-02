@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════════
+   NIDHIVAN PROPERTY LINKERS — DESIGN TOKENS
+   Sacred Premium Visual Language
+   ═══════════════════════════════════════════════ */
+
+:root {
+  /* Color System */
+  --color-bg-primary: #050810;
+  --color-bg-secondary: #0A0E1A;
+  --color-bg-surface: #0F1628;
+  --color-bg-elevated: #151E38;
+
+  --color-saffron: #E8821A;
+  --color-saffron-light: #F4A520;
+  --color-saffron-bright: #F9C46A;
+
+  --color-gold: #C9A84C;
+  --color-gold-light: #E2C46B;
+  --color-gold-pale: #F0DFA8;
+
+  --color-lotus: #F9F4EC;
+  --color-lotus-dim: #F0E8D6;
+
+  --color-text-primary: #F9F4EC;
+  --color-text-secondary: rgba(249, 244, 236, 0.65);
+  --color-text-muted: rgba(249, 244, 236, 0.4);
+  --color-text-gold: #E2C46B;
+
+  --color-border: rgba(201, 168, 76, 0.12);
+  --color-border-bright: rgba(201, 168, 76, 0.28);
+  --color-divider: rgba(249, 244, 236, 0.06);
+
+  /* Typography Scale */
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Spacing (8pt grid) */
+  --space-1: 0.25rem;   /* 4px  */
+  --space-2: 0.5rem;    /* 8px  */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-24: 6rem;     /* 96px */
+  --space-32: 8rem;     /* 128px */
+
+  /* Motion */
+  --ease-sacred: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.0, 0, 0.2, 1);
+
+  --duration-fast: 300ms;
+  --duration-medium: 600ms;
+  --duration-slow: 1000ms;
+  --duration-cinematic: 1400ms;
+
+  /* Layout */
+  --max-content: 1200px;
+  --max-narrow: 800px;
+  --max-wide: 1440px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-gold-sm: 0 2px 12px rgba(201, 168, 76, 0.15);
+  --shadow-gold-md: 0 4px 24px rgba(201, 168, 76, 0.2);
+  --shadow-gold-lg: 0 8px 48px rgba(201, 168, 76, 0.25);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold);
+  border-radius: var(--radius-full);
+}
+
+/* Selection */
+::selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: var(--color-lotus);
+}
